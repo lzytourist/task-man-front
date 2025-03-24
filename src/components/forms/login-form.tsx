@@ -17,6 +17,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/lib/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 export function LoginForm() {
   const router = useRouter();
@@ -29,9 +30,26 @@ export function LoginForm() {
     }
   });
 
-  const onSubmit = (data: LoginSchemaType) => {
-    console.log(data);
-    router.push('/dashboard');
+  const onSubmit = async (data: LoginSchemaType) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token/`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    console.log()
+
+    if (response.ok) {
+      form.reset();
+      toast.success('Login successful.');
+      router.push('/dashboard');
+    } else {
+      form.resetField('password');
+      toast.error('Wrong credentials.');
+    }
   };
 
   return (

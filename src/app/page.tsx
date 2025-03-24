@@ -1,7 +1,21 @@
+'use client'
+
 import {GalleryVerticalEnd} from "lucide-react";
 import {LoginForm} from "@/components/forms/login-form";
+import {useAuth} from "@/hooks/use-auth";
+import {useEffect} from "react";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
+    const router = useRouter();
+    const {accessToken} = useAuth();
+
+    useEffect(() => {
+        if (!!accessToken) {
+            router.push('/dashboard');
+        }
+    }, [accessToken, router]);
+
     return (
         <div className={'flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10'}>
             <div className="flex w-full max-w-sm flex-col gap-6">
