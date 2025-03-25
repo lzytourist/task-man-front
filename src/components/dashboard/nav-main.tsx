@@ -1,6 +1,6 @@
 "use client"
 
-import {MailIcon, PlusCircleIcon, type LucideIcon} from "lucide-react"
+import {PlusCircleIcon, type LucideIcon, BellIcon} from "lucide-react"
 
 import {Button} from "@/components/ui/button"
 import {
@@ -11,17 +11,20 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link";
+import {useAuth} from "@/hooks/use-auth";
+import {hasPermission} from "@/lib/utils";
 
-export function NavMain({
-                          items,
-                        }: {
+export function NavMain({items,}: {
   items: {
     title: string
     url: string
-    icon?: LucideIcon
+    icon?: LucideIcon,
+    permissions: string[]
   }[]
 }) {
-  return (
+  const {user} = useAuth();
+
+  return !!user && (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
@@ -38,13 +41,13 @@ export function NavMain({
               className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
               variant="outline"
             >
-              <MailIcon/>
-              <span className="sr-only">Inbox</span>
+              <BellIcon/>
+              <span className="sr-only">Notifications</span>
             </Button>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
+          {items.map((item) => hasPermission(item.permissions ?? [], user) && (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <Link href={item.url}>

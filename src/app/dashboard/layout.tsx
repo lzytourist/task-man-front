@@ -1,4 +1,6 @@
-import {ReactNode} from "react";
+'use client'
+
+import {ReactNode, useEffect} from "react";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {AppSidebar} from "@/components/dashboard/app-sidebar";
 import {Separator} from "@radix-ui/react-menu";
@@ -9,10 +11,22 @@ import {
   BreadcrumbList, BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import {authUser} from "@/actions/auth";
+import {useAuth} from "@/hooks/use-auth";
+import {AuthUserType} from "@/types";
 
 export default function Layout({children}: {
   children: ReactNode,
 }) {
+  const {setUser} = useAuth();
+
+  useEffect(() => {
+    (async() => {
+      const user = await authUser() as AuthUserType;
+      setUser(user)
+    })()
+  }, [setUser]);
+
   return (
     <SidebarProvider>
       <AppSidebar variant={'inset'}/>
@@ -34,8 +48,6 @@ export default function Layout({children}: {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          
-
         </header>
         <div className="p-4">
           {children}

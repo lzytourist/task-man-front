@@ -3,14 +3,14 @@
 import * as React from "react"
 import {
   ArrowUpCircleIcon,
-  BarChartIcon,
+  BarChartIcon, BoltIcon,
   CameraIcon,
   ClipboardListIcon,
   FileCodeIcon,
   FileTextIcon,
-  FolderIcon,
+  FolderIcon, GroupIcon,
   HelpCircleIcon,
-  LayoutDashboardIcon,
+  LayoutDashboardIcon, LucideMail,
   SettingsIcon,
   UsersIcon,
 } from "lucide-react"
@@ -28,34 +28,46 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import {useAuth} from "@/hooks/use-auth";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
-      icon: LayoutDashboardIcon,
+      url: "/dashboard",
+      permissions: [],
+      icon: LayoutDashboardIcon
     },
     {
       title: "Analytics",
       url: "#",
-      icon: BarChartIcon,
+      permissions: [],
+      icon: BarChartIcon
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: FolderIcon,
+      title: "Task",
+      url: "/tasks",
+      permissions: ['view_task'],
+      icon: FolderIcon
     },
     {
       title: "Team",
       url: "#",
-      icon: UsersIcon,
+      permissions: ['view_team'],
+      icon: GroupIcon
     },
+    {
+      title: "Email",
+      url: "#",
+      permissions: ['send_email'],
+      icon: LucideMail
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users",
+      permissions: ['view_user'],
+      icon: UsersIcon
+    }
   ],
   navClouds: [
     {
@@ -109,24 +121,35 @@ const data = {
     {
       title: "Settings",
       url: "#",
-      icon: SettingsIcon,
+      permissions: ['view_settings'],
+      icon: SettingsIcon
+    },
+    {
+      title: "Roles",
+      url: "/dashboard/roles",
+      permissions: ['view_role'],
+      icon: BoltIcon
     },
     {
       title: "Get Help",
       url: "#",
-      icon: HelpCircleIcon,
+      permissions: [],
+      icon: HelpCircleIcon
     },
   ],
   documents: [
     {
       name: "Reports",
       url: "#",
-      icon: ClipboardListIcon,
+      permissions: ['generate_report'],
+      icon: ClipboardListIcon
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const {user} = useAuth();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -150,7 +173,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )
