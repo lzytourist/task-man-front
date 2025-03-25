@@ -8,6 +8,9 @@ interface LoginToken {
   refresh: string;
 }
 
+const ACCESS_COOKIE_NAME = 'access';
+const REFRESH_COOKIE_NAME = 'refresh';
+
 export const login = async (data: LoginSchemaType) => {
   const response = await fetch(`${process.env.API_URL}/account/token/`, {
     method: 'POST',
@@ -21,9 +24,9 @@ export const login = async (data: LoginSchemaType) => {
 
   if (response.ok) {
     const data = await response.json() as LoginToken;
-    const cookieStore = await cookies() ;
-    cookieStore.set('access', data.access);
-    cookieStore.set('refresh', data.refresh);
+    const cookieStore = await cookies();
+    cookieStore.set(ACCESS_COOKIE_NAME, data.access);
+    cookieStore.set(REFRESH_COOKIE_NAME, data.refresh);
     return {
       error: false,
       data: data
@@ -35,3 +38,9 @@ export const login = async (data: LoginSchemaType) => {
     }
   }
 };
+
+export const logout = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete(ACCESS_COOKIE_NAME);
+  cookieStore.delete(REFRESH_COOKIE_NAME);
+}
