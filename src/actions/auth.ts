@@ -9,7 +9,7 @@ interface LoginToken {
 }
 
 export const login = async (data: LoginSchemaType) => {
-  const response = await fetch('http://localhost:8000/api/account/token/', {
+  const response = await fetch(`${process.env.API_URL}/account/token/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export const login = async (data: LoginSchemaType) => {
     body: JSON.stringify(data)
   });
 
-  console.log(response);
+  // console.log(response);
 
   if (response.ok) {
     const data = await response.json() as LoginToken;

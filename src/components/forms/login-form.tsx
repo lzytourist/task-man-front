@@ -17,7 +17,7 @@ import {LoginSchema} from "@/lib/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
-import {login} from "@/actions/login";
+import {login} from "@/actions/auth";
 
 export function LoginForm() {
   const router = useRouter();
