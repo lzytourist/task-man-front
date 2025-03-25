@@ -2,20 +2,13 @@
 
 import {LoginSchemaType} from "@/types";
 import {cookies} from "next/headers";
-import jwt from "jsonwebtoken";
+import {ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME} from "@/lib/constants";
+import {getTokenExpiry} from "@/lib/utils";
 
 interface LoginToken {
   access: string;
   refresh: string;
 }
-
-const ACCESS_COOKIE_NAME = 'access';
-const REFRESH_COOKIE_NAME = 'refresh';
-
-const getTokenExpiry = (token: string) => {
-  const {exp} = jwt.decode(token) as {exp: number}
-  return exp;
-};
 
 export const login = async (data: LoginSchemaType) => {
   const response = await fetch(`${process.env.API_URL}/account/token/`, {
