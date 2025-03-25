@@ -22,13 +22,9 @@ export default function AssignRoleForm({roles, user}: { roles: Role[], user: Use
     }
   }, [user, form]);
 
-  const handleChange = (role: string) => {
+  const handleChange = async (role: string) => {
     form.setValue('role', role);
-    console.log(form.getValues('role'))
-    const clock = setTimeout(async () => {
-      const response = await assignRole(role, user.id.toString());
-      console.log(response);
-
+    const response = await assignRole(role, user.id.toString());
       if (response.error) {
         toast.error('Could not update user role');
         form.reset();
@@ -36,13 +32,11 @@ export default function AssignRoleForm({roles, user}: { roles: Role[], user: Use
       } else {
         toast.success('User role updated');
       }
-    }, 300);
-    clearTimeout(clock);
   }
 
   return (
 
-    <Select value={form.getValues('role')!} onValueChange={handleChange}>
+    <Select defaultValue={form.getValues('role')!} onValueChange={handleChange}>
       <SelectTrigger className={'w-40'}>
         <SelectValue placeholder={'Select role'}/>
       </SelectTrigger>
