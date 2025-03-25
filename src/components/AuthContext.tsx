@@ -17,7 +17,7 @@ export function AuthContextProvider({children}: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    updateUser().finally();
+    // updateUser().finally();
   }, []);
 
   const context = {

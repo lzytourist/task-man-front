@@ -10,14 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
 import {useForm} from "react-hook-form";
-import {LoginSchemaType} from "@/types";
+import {LoginSchemaType, ValidationErrors} from "@/types";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LoginSchema} from "@/lib/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
+import {login} from "@/actions/login";
 
 export function LoginForm() {
   const router = useRouter();
@@ -25,30 +25,30 @@ export function LoginForm() {
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: ''
     }
   });
 
   const onSubmit = async (data: LoginSchemaType) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token/`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
+    const res = await login(data);
 
-    console.log()
-
-    if (response.ok) {
-      form.reset();
-      toast.success('Login successful.');
-      router.push('/dashboard');
-    } else {
+    if (res.error) {
       form.resetField('password');
-      toast.error('Wrong credentials.');
+      if (res.data.detail) {
+        toast.error(res.data.detail);
+      } else {
+        const errors = res.data as ValidationErrors;
+        Object.keys(errors).forEach((key) => {
+          form.setError(key as 'email' | 'password', {
+            message: errors[key].join('. ')
+          });
+        });
+      }
+    } else {
+      form.reset();
+      toast.success('Login successful!');
+      router.push('/dashboard');
     }
   };
 
@@ -95,13 +95,13 @@ export function LoginForm() {
                   <div className="grid gap-2">
                     <FormField render={({field}) => (
                       <FormItem>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input {...field}/>
                         </FormControl>
                         <FormMessage/>
                       </FormItem>
-                    )} name={'username'}/>
+                    )} name={'email'}/>
                   </div>
                   <div className="grid gap-2">
 
