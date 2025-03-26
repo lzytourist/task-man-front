@@ -7,29 +7,37 @@ import {UserSchema} from "@/lib/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {useEffect} from "react";
+import {useAuth} from "@/hooks/use-auth";
+import {hasPermission} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
+import {createUser} from "@/actions/users";
+import {toast} from "sonner";
+import {useRouter} from "next/navigation";
 
-export default function UserForm({user, roles}: { user: UserType | null, roles: Role[] }) {
+export default function UserForm({user, roles}: { user?: UserType, roles: Role[] }) {
+  const {user: authUser} = useAuth();
+
   const form = useForm<UserSchemaType>({
     resolver: zodResolver(UserSchema),
     defaultValues: {
-      name: '',
-      email: '',
+      name: user?.name ?? '',
+      email: user?.email ?? '',
       password: '',
-      role: null
+      role: user?.role
     }
   });
 
-  useEffect(() => {
-    if (user) {
-      form.setValue('name', user.name);
-      form.setValue('email', user.email);
-      form.setValue('role', user.role);
-    }
-  }, [form, user]);
+  const router = useRouter();
 
   const onSubmit = async (data: UserSchemaType) => {
-
+    const response = await createUser(data);
+    if (response.error) {
+      toast.error('User could not be created');
+    } else {
+      toast.success('User create successfully');
+      form.reset();
+      router.push('/dashboard/users');
+    }
   }
 
   return (
@@ -62,7 +70,7 @@ export default function UserForm({user, roles}: { user: UserType | null, roles: 
             <FormMessage/>
           </FormItem>
         )} name={'password'}/>
-        <FormField render={({field}) => (
+        {!!authUser && hasPermission(['assign_role'], authUser) && <FormField render={({field}) => (
           <FormItem>
             <FormLabel>Role</FormLabel>
             <FormControl>
@@ -72,14 +80,15 @@ export default function UserForm({user, roles}: { user: UserType | null, roles: 
                 </SelectTrigger>
                 <SelectContent>
                   {!!roles && roles.map((role, index) => (
-                    <SelectItem value={role.id ?? ''} key={index}>{role.title}</SelectItem>
+                    <SelectItem value={role.id!.toString()} key={index}>{role.title}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </FormControl>
             <FormMessage/>
           </FormItem>
-        )} name={'role'}/>
+        )} name={'role'}/>}
+        <Button type={'submit'} className={'w-full cursor-pointer'}>Submit</Button>
       </form>
     </Form>
   )
