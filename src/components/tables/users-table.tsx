@@ -117,8 +117,8 @@ export default function UsersTable() {
               <TableRow key={item.id}>
                 <TableCell className="font-medium">{item.name}</TableCell>
                 <TableCell>{item.email}</TableCell>
-                <TableCell>
-                  {!!user && (hasPermission(['update_user'], user) ? <div>
+                <TableCell className={'text-center'}>
+                  {!!user && (hasPermission(['update_user', 'assign_role'], user) ? <div>
                       <AssignRoleForm roles={roles} user={item}/>
                   </div> : item.role_title)}
                 </TableCell>
