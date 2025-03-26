@@ -1,12 +1,12 @@
 'use client'
 
 import {createContext, ReactNode, useState} from "react";
-import {AuthContextType, UserType} from "@/types";
+import {AuthContextType, AuthUserType} from "@/types";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthContextProvider({children}: { children: ReactNode }) {
-  const [user, setUser] = useState<UserType | undefined>(undefined);
+  const [user, setUser] = useState<AuthUserType | undefined>(undefined);
 
   const context = {
     user,
