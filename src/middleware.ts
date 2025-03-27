@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import {cookies} from "next/headers";
-import {ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, USER_COOKIE_NAME} from "@/lib/constants";
+import {ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME} from "@/lib/constants";
 import {getTokenExpiry} from "@/lib/utils";
-import {authUser} from "@/actions/auth";
 
 export async function middleware(request: NextRequest) {
   const cookieStore = await cookies();

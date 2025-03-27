@@ -21,3 +21,12 @@ export const UserSchema = z.object({
 export const AssignRoleSchema = z.object({
   role: z.string().nullable(),
 });
+
+export const TaskSchema = z.object({
+  title: z.string(),
+  description: z.string().nullable(),
+  status: z.string(),
+  priority: z.string(),
+  deadline: z.string(),
+  assigned_to_id: z.string(),
+});

@@ -46,7 +46,7 @@ const data = {
     },
     {
       title: "Task",
-      url: "/tasks",
+      url: "/dashboard/tasks",
       permissions: ['view_task'],
       icon: FolderIcon
     },

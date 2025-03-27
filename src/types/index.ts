@@ -1,10 +1,11 @@
 import {z} from "zod";
-import {AssignRoleSchema, LoginSchema, RoleSchema, UserSchema} from "@/lib/schemas";
+import {AssignRoleSchema, LoginSchema, RoleSchema, TaskSchema, UserSchema} from "@/lib/schemas";
 
 export type LoginSchemaType = z.infer<typeof LoginSchema>;
 export type UserSchemaType = z.infer<typeof UserSchema>;
 export type RoleSchemaType = z.infer<typeof RoleSchema>;
 export type AssignRoleType = z.infer<typeof AssignRoleSchema>;
+export type TaskSchemaType = z.infer<typeof TaskSchema>;
 
 export interface AuthContextType {
   user: AuthUserType | undefined,
@@ -46,4 +47,17 @@ export interface UserType {
 
 export type ValidationErrors = {
   [key: string]: string[]
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string;
+  assigned_to: UserType | null;
+  created_by: UserType;
+  created_at: string;
+  updated_at: string;
+  deadline: string;
+  priority: string;
+  status: string;
 }
