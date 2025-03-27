@@ -15,7 +15,7 @@ export const UserSchema = z.object({
   name: z.string().min(1, {message: "Please enter name"}),
   email: z.string().email({message: "Please enter a valid email"}),
   password: z.string().min(6, {message: "Password must be at least of 6 characters"}),
-  role: z.coerce.number().nullable(),
+  role: z.string().nullish(),
 });
 
 export const AssignRoleSchema = z.object({

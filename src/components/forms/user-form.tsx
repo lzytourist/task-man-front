@@ -23,7 +23,7 @@ export default function UserForm({user, roles}: { user?: UserType, roles: Role[]
       name: user?.name ?? '',
       email: user?.email ?? '',
       password: '',
-      role: user?.role
+      role: user?.role.toString()
     }
   });
 
@@ -33,6 +33,9 @@ export default function UserForm({user, roles}: { user?: UserType, roles: Role[]
     const response = await createUser(data);
     if (response.error) {
       toast.error('User could not be created');
+      Object.keys(response.data).forEach((key) => {
+        form.setError(key as 'name' | 'email' | 'role' | 'password', {message: response.data[key].join('. ')})
+      })
     } else {
       toast.success('User create successfully');
       form.reset();
