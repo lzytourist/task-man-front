@@ -1,12 +1,18 @@
 import RoleForm from "@/components/forms/role-form";
 import {getPermissions} from "@/actions/users";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 
 export default async function Page() {
-  const perms = await getPermissions();
+  const permissions = await getPermissions();
 
   return (
-    <div>
-      <RoleForm permissions={perms}/>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Create Role</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <RoleForm permissions={permissions}/>
+      </CardContent>
+    </Card>
   )
 }
