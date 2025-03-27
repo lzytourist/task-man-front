@@ -44,6 +44,17 @@ export const getRoles = async () => {
   return await response.json();
 }
 
+export const getRole = async (id: string) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
+  const response = await fetch(`${process.env.API_URL}/account/roles/${id}/`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken!.value}`
+    }
+  });
+  return await response.json();
+}
+
 export const getPermissions = async () => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
@@ -78,6 +89,24 @@ export const addRole = async (data: RoleSchemaType) => {
       data: await response.json()
     }
   }
+}
+
+export const updateRole = async (id: string, data: RoleSchemaType) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
+  const response = await fetch(`${process.env.API_URL}/account/roles/${id}/`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken!.value}`,
+      'Content-Type': 'application/json'
+    },
+    method: 'PATCH',
+    body: JSON.stringify(data)
+  });
+
+  return {
+      error: !response.ok,
+      data: await response.json()
+    }
 }
 
 export const assignRole = async (role: string, userId: string) => {

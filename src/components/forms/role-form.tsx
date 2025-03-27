@@ -1,25 +1,24 @@
 'use client'
 
 import {useForm} from "react-hook-form";
-import {Permission, RoleSchemaType} from "@/types";
+import {Permission, Role, RoleSchemaType} from "@/types";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {RoleSchema} from "@/lib/schemas";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {ChangeEvent} from "react";
-import {Checkbox} from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
-import {addRole} from "@/actions/users";
+import {addRole, updateRole} from "@/actions/users";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 
-export default function RoleForm({permissions}: { permissions: Permission[] }) {
+export default function RoleForm({permissions, role}: { permissions: Permission[], role?: Role }) {
   const form = useForm<RoleSchemaType>({
     resolver: zodResolver(RoleSchema),
     defaultValues: {
-      title: '',
-      codename: '',
-      permissions: []
+      title: role?.title ?? '',
+      codename: role?.codename ?? '',
+      permissions: role?.permissions ?? []
     }
   });
 
@@ -38,13 +37,20 @@ export default function RoleForm({permissions}: { permissions: Permission[] }) {
   const router = useRouter();
 
   const onSubmit = async (data: RoleSchemaType) => {
-    const response = await addRole(data);
+    let response: { data: object, error: boolean };
+    if (!role) {
+      response = await addRole(data);
+    } else {
+      response = await updateRole(role!.id!.toString(), data);
+    }
     if (response.error) {
       // console.log(response.data);
       // TODO: Show error in the form
       toast.error(JSON.stringify(response.data));
     } else {
-      toast.success('Role added successfully');
+      toast.success(
+        !role ? 'Role added successfully' : 'Role updated successfully'
+      );
       form.reset();
       router.push('/dashboard/roles');
     }
@@ -78,7 +84,12 @@ export default function RoleForm({permissions}: { permissions: Permission[] }) {
             <FormItem className={'flex items-center'}>
               <FormLabel className={'capitalize'}>{permission.title}</FormLabel>
               <FormControl>
-                <Input className={'h-[18px] border-0 ring-0 outline-0 shadow-none drop-shadow-none'} defaultValue={permission.id} type={'checkbox'} onChange={handleCheck}/>
+                <Input
+                  className={'h-[18px] border-0 ring-0 outline-0 shadow-none drop-shadow-none'}
+                  defaultValue={permission.id}
+                  type={'checkbox'}
+                  defaultChecked={role?.permissions.includes(parseInt(permission.id)) ?? false}
+                  onChange={handleCheck}/>
               </FormControl>
               <FormMessage/>
             </FormItem>
