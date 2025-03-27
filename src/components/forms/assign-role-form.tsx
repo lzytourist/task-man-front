@@ -11,7 +11,7 @@ export default function AssignRoleForm({roles, user}: { roles: Role[], user: Use
     const form = useForm<AssignRoleType>({
         resolver: zodResolver(AssignRoleSchema),
         defaultValues: {
-            role: user.role.toString()
+            role: user.role?.toString()
         }
     });
 
