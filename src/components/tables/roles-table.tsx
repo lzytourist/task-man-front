@@ -41,7 +41,7 @@ export default function RolesTable() {
               {
                 !!user && hasPermission(['update_role'], user) &&
                   <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
-                      <Link href={`/dashboard/users/${role.id}/edit`}>
+                      <Link href={`/dashboard/roles/${role.id}/edit`}>
                           <EditIcon/>
                       </Link>
                   </Button>
@@ -49,7 +49,7 @@ export default function RolesTable() {
               {
                 !!user && hasPermission(['view_role'], user) &&
                   <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
-                      <Link href={`/dashboard/users/${role.id}/view`}>
+                      <Link href={`/dashboard/roles/${role.id}/view`}>
                           <ViewIcon/>
                       </Link>
                   </Button>
@@ -57,7 +57,7 @@ export default function RolesTable() {
               {
                 !!user && hasPermission(['delete_role'], user) &&
                   <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
-                      <Link href={`/dashboard/users/${role.id}/delete`}>
+                      <Link href={`/dashboard/roles/${role.id}/delete`}>
                           <TrashIcon/>
                       </Link>
                   </Button>
