@@ -26,7 +26,7 @@ export const formatDate = (date: string | null, dateOnly: boolean = false) => {
     day: "2-digit",
   };
 
-  if (dateOnly) {
+  if (!dateOnly) {
     options['weekday'] = 'short';
     options['hour'] = '2-digit';
     options['minute'] = '2-digit';
