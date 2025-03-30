@@ -1,59 +1,26 @@
 'use server'
 
-import {cookies} from "next/headers";
-import {ACCESS_COOKIE_NAME} from "@/lib/constants";
 import {TaskSchemaType} from "@/types";
-
-const API_BASE = process.env.API_URL;
-
-const getAccessToken = async () => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  return accessToken?.value;
-}
+import {fetchAPI} from "@/actions/base";
 
 export const getTasks = async () => {
-  const response = await fetch(`${API_BASE}/tasks/`, {
-    headers: {'Authorization': `Bearer ${await getAccessToken()}`}
-  });
-  return await response.json();
+  return await fetchAPI(`/tasks/`, {method: 'GET'});
 }
 
 export const createTask = async (data: TaskSchemaType) => {
-  const response = await fetch(`${API_BASE}/tasks/`, {
-    headers: {
-      'Authorization': `Bearer ${await getAccessToken()}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetchAPI(`/tasks/`, {
     method: 'POST',
     body: JSON.stringify(data)
   });
-  return {
-    error: !response.ok,
-    data: await response.json()
-  };
 }
 
 export const getTask = async (id: string) => {
-  const response = await fetch(`${API_BASE}/tasks/${id}/`, {
-    headers: {
-      'Authorization': `Bearer ${await getAccessToken()}`,
-    },
-  });
-  return await response.json();
+  return await fetchAPI(`/tasks/${id}/`, {method: 'GET'});
 }
 
 export const updateTask = async (id: string, data: TaskSchemaType) => {
-  const response = await fetch(`${API_BASE}/tasks/${id}/`, {
-    headers: {
-      'Authorization': `Bearer ${await getAccessToken()}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetchAPI(`/tasks/${id}/`, {
     method: 'PATCH',
     body: JSON.stringify(data)
   });
-  return {
-    error: !response.ok,
-    data: await response.json()
-  };
 }

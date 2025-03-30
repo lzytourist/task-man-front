@@ -1,136 +1,48 @@
 'use server'
 
-import {cookies} from "next/headers";
-import {ACCESS_COOKIE_NAME} from "@/lib/constants";
 import {RoleSchemaType, UserSchemaType} from "@/types";
 
 export const getUsers = async () => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/users/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`
-    }
-  });
-  return await response.json();
+  return await fetch(`/account/users/`, {method: 'GET'});
 }
 
 export const createUser = async (data: UserSchemaType) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/users/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetch(`/account/users/`, {
     method: 'POST',
     body: JSON.stringify(data)
   });
-
-  return {
-    error: !response.ok,
-    data: await response.json()
-  }
 }
 
 export const getRoles = async () => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/roles/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`
-    }
-  });
-  return await response.json();
+  return await fetch(`/account/roles/`, {method: 'GET'});
 }
 
 export const getRole = async (id: string) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/roles/${id}/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`
-    }
-  });
-  return await response.json();
+  return await fetch(`/account/roles/${id}/`, {method: 'GET'});
 }
 
 export const getPermissions = async () => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/permissions/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`
-    }
-  });
-  return await response.json();
+  return await fetch(`/account/permissions/`, {method: 'GET'});
 }
 
 export const addRole = async (data: RoleSchemaType) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/roles/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetch(`/account/roles/`, {
     method: 'POST',
     body: JSON.stringify(data)
   });
-
-  if (response.ok) {
-    return {
-      error: false,
-      data: await response.json()
-    }
-  } else {
-    return {
-      error: true,
-      data: await response.json()
-    }
-  }
 }
 
 export const updateRole = async (id: string, data: RoleSchemaType) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/roles/${id}/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetch(`/account/roles/${id}/`, {
     method: 'PATCH',
     body: JSON.stringify(data)
   });
-
-  return {
-      error: !response.ok,
-      data: await response.json()
-    }
 }
 
 export const assignRole = async (role: string, userId: string) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
-  const response = await fetch(`${process.env.API_URL}/account/users/${userId}/`, {
-    headers: {
-      'Authorization': `Bearer ${accessToken!.value}`,
-      'Content-Type': 'application/json'
-    },
+  return await fetch(`/account/users/${userId}/`, {
     method: 'PATCH',
     body: JSON.stringify({'role': role})
   });
-
-  if (response.ok) {
-    return {
-      error: false,
-      data: await response.json()
-    }
-  } else {
-    return {
-      error: true,
-      data: await response.json()
-    }
-  }
 }
 
