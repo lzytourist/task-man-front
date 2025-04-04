@@ -1,6 +1,6 @@
 "use client"
 
-import {PlusCircleIcon, type LucideIcon, BellIcon} from "lucide-react"
+import {PlusCircleIcon, type LucideIcon} from "lucide-react"
 
 import {Button} from "@/components/ui/button"
 import {
@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import {useAuth} from "@/hooks/use-auth";
 import {hasPermission} from "@/lib/utils";
+import Notifications from "@/components/notifications";
 
 export function NavMain({items,}: {
   items: {
@@ -36,14 +37,8 @@ export function NavMain({items,}: {
               <PlusCircleIcon/>
               <span>Quick Create</span>
             </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <BellIcon/>
-              <span className="sr-only">Notifications</span>
-            </Button>
+
+            <Notifications/>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

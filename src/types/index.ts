@@ -61,3 +61,11 @@ export interface Task {
   priority: string;
   status: string;
 }
+
+export interface Notification {
+  message: string;
+  generated_by: UserType,
+  user: UserType,
+  created_at: string;
+  updated_at: string;
+}
