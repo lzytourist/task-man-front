@@ -57,3 +57,12 @@ export const updateTask = async (id: string, data: TaskSchemaType) => {
     data: await response.json()
   };
 }
+
+export const getAssignedTasks = async () => {
+  const response = await fetch(`${API_BASE}/tasks/assigned/`, {
+    headers: {
+      'Authorization': `Bearer ${await getAccessToken()}`,
+    },
+  });
+  return await response.json();
+}
