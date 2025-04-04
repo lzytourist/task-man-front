@@ -16,6 +16,17 @@ export const getUsers = async () => {
   return await response.json();
 }
 
+export const getUser = async (id: string) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
+  const response = await fetch(`${process.env.API_URL}/account/users/${id}/`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken!.value}`
+    }
+  });
+  return await response.json();
+}
+
 export const createUser = async (data: UserSchemaType) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
@@ -148,3 +159,18 @@ export const deleteRole = async (id: string) => {
   revalidatePath('/dashboard/roles');
   return response.ok;
 }
+
+export const deleteUser = async (id: string) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
+  const response = await fetch(`${process.env.API_URL}/account/users/${id}/`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken!.value}`,
+      'Content-Type': 'application/json'
+    },
+    method: 'DELETE',
+  });
+  revalidatePath('/dashboard/users');
+  return response.ok;
+}
+

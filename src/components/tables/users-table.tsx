@@ -13,11 +13,13 @@ import {Button} from "@/components/ui/button";
 import {EditIcon, TrashIcon, ViewIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Role, UserType} from "@/types";
-import {getRoles, getUsers} from "@/actions/users";
+import {deleteUser, getRoles, getUsers} from "@/actions/users";
 import Link from "next/link";
 import {useAuth} from "@/hooks/use-auth";
 import {hasPermission} from "@/lib/utils";
 import AssignRoleForm from "@/components/forms/assign-role-form";
+import DeleteButton from "@/components/buttons/delete-button";
+import {PERMISSIONS} from "@/lib/constants";
 
 interface Result {
   next: string | null;
@@ -26,21 +28,14 @@ interface Result {
   results: UserType[]
 }
 
-export default function UsersTable() {
-  const [data, setData] = useState<UserType[]>([]);
-  const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
-  const pageSize = 15;
+export default function UsersTable({users}: {users: UserType[]}) {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const {user} = useAuth();
 
   useEffect(() => {
     (async () => {
-      const users = await getUsers() as UserType[];
-      setData(users);
-
-      if (user && hasPermission(['update_user', 'assign_role'], user)) {
+      if (user && hasPermission([PERMISSIONS.UPDATE_USER, PERMISSIONS.ASSIGN_ROLE], user)) {
         const data = await getRoles() as Role[];
         setRoles(data);
       }
@@ -58,18 +53,18 @@ export default function UsersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {(data || []).map((item) => (
+        {(users || []).map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="font-medium">{item.name}</TableCell>
+            <TableCell>{item.name}</TableCell>
             <TableCell>{item.email}</TableCell>
             <TableCell className={'text-center'}>
-              {!!user && (hasPermission(['update_user', 'assign_role'], user) ? <div>
+              {!!user && (hasPermission([PERMISSIONS.UPDATE_ROLE, PERMISSIONS.ASSIGN_ROLE], user) ? <div>
                 <AssignRoleForm roles={roles} user={item}/>
               </div> : item.role_title)}
             </TableCell>
             <TableCell className="text-right">
               {
-                !!user && hasPermission(['update_user'], user) &&
+                !!user && hasPermission([PERMISSIONS.UPDATE_USER], user) &&
                   <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
                       <Link href={`/dashboard/users/${item.id}/edit`}>
                           <EditIcon/>
@@ -77,7 +72,7 @@ export default function UsersTable() {
                   </Button>
               }
               {
-                !!user && hasPermission(['view_user'], user) &&
+                !!user && hasPermission([PERMISSIONS.VIEW_USER], user) &&
                   <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
                       <Link href={`/dashboard/users/${item.id}/view`}>
                           <ViewIcon/>
@@ -85,36 +80,13 @@ export default function UsersTable() {
                   </Button>
               }
               {
-                !!user && hasPermission(['delete_user'], user) &&
-                  <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
-                      <Link href={`/dashboard/users/${item.id}/delete`}>
-                          <TrashIcon/>
-                      </Link>
-                  </Button>
+                !!user && hasPermission([PERMISSIONS.DELETE_USER], user) &&
+                <DeleteButton id={item.id.toString()} action={deleteUser}/>
               }
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
-
-      {(total > 0) && <TableFooter>
-          <TableRow>
-              <TableCell colSpan={4}>
-                  <div className="flex items-center justify-end space-x-2 py-4">
-                      <Button variant={'outline'} onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                              disabled={page === 1}>
-                          Previous
-                      </Button>
-                      <span>Page {page} of {Math.ceil(total / pageSize)}</span>
-                      <Button variant={'outline'}
-                              onClick={() => setPage((p) => (p < Math.ceil(total / pageSize) ? p + 1 : p))}
-                              disabled={page * pageSize >= total}>
-                          Next
-                      </Button>
-                  </div>
-              </TableCell>
-          </TableRow>
-      </TableFooter>}
     </Table>
   );
 }
