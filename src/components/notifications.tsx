@@ -24,7 +24,7 @@ export default function Notifications() {
       </PopoverTrigger>
       <PopoverContent>
         {notifications.map((notification, index) => (
-          <div className={'border-b-2 border-gray-100 py-1'} key={index}>{notification.message}</div>
+          <div className={'border-b-2 border-gray-100 py-1 text-sm'} key={index}>{notification.message}</div>
         ))}
       </PopoverContent>
     </Popover>
