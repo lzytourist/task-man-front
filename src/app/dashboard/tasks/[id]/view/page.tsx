@@ -5,6 +5,7 @@ import {formatDate} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {ArrowLeft} from "lucide-react";
+import {Badge} from "@/components/ui/badge";
 
 export default async function Page({params: {id}}: { params: { id: string } }) {
   const task = await getTask(id) as Task;
@@ -17,10 +18,12 @@ export default async function Page({params: {id}}: { params: { id: string } }) {
           <p className={'font-bold'}>Name: {task.assigned_to?.name}</p>
           <p>Role: {task.assigned_to?.role_title}</p>
         </div>
-        <div>
+        <div className={'text-center'}>
           <p className={'font-bold text-orange-400 animate-pulse'}>Deadline: {formatDate(task.deadline, true)}</p>
+          <p>Status: <span className={'uppercase'}>{task.status}</span></p>
+          <p>Priority: <span className={'uppercase'}><Badge>{task.priority}</Badge></span></p>
         </div>
-        <div>
+        <div className={'flex flex-col items-end'}>
           <h2 className={'text-xl uppercase'}>Created by</h2>
           <p className={'font-bold'}>Name: {task.created_by?.name}</p>
           <p>Role: {task.created_by?.role_title}</p>
