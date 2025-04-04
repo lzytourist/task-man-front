@@ -3,6 +3,7 @@
 import {cookies} from "next/headers";
 import {ACCESS_COOKIE_NAME} from "@/lib/constants";
 import {RoleSchemaType, UserSchemaType} from "@/types";
+import {revalidatePath} from "next/cache";
 
 export const getUsers = async () => {
   const cookieStore = await cookies();
@@ -104,9 +105,9 @@ export const updateRole = async (id: string, data: RoleSchemaType) => {
   });
 
   return {
-      error: !response.ok,
-      data: await response.json()
-    }
+    error: !response.ok,
+    data: await response.json()
+  }
 }
 
 export const assignRole = async (role: string, userId: string) => {
@@ -134,3 +135,16 @@ export const assignRole = async (role: string, userId: string) => {
   }
 }
 
+export const deleteRole = async (id: string) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_COOKIE_NAME);
+  const response = await fetch(`${process.env.API_URL}/account/roles/${id}/`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken!.value}`,
+      'Content-Type': 'application/json'
+    },
+    method: 'DELETE',
+  });
+  revalidatePath('/dashboard/roles');
+  return response.ok;
+}

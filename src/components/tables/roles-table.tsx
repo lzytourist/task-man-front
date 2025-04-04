@@ -4,22 +4,14 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {hasPermission} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import {EditIcon, TrashIcon, ViewIcon} from "lucide-react";
+import {EditIcon, ViewIcon} from "lucide-react";
 import {useAuth} from "@/hooks/use-auth";
-import {useEffect, useState} from "react";
 import {Role} from "@/types";
-import {getRoles} from "@/actions/users";
+import {deleteRole} from "@/actions/users";
+import DeleteButton from "@/components/buttons/delete-button";
 
-export default function RolesTable() {
+export default function RolesTable({roles}: {roles: Role[]}) {
   const {user} = useAuth();
-  const [roles, setRoles] = useState<Role[]>();
-
-  useEffect(() => {
-    (async () => {
-      const data = await getRoles() as Role[];
-      setRoles(data);
-    })()
-  }, []);
 
   return (
     <Table>
@@ -56,11 +48,7 @@ export default function RolesTable() {
               }
               {
                 !!user && hasPermission(['delete_role'], user) &&
-                  <Button asChild={true} className={'cursor-pointer'} variant={'ghost'} size={'sm'}>
-                      <Link href={`/dashboard/roles/${role.id}/delete`}>
-                          <TrashIcon/>
-                      </Link>
-                  </Button>
+                <DeleteButton id={role.id!} action={deleteRole}/>
               }
             </TableCell>
           </TableRow>
