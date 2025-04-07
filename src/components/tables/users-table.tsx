@@ -4,16 +4,15 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow
 } from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
-import {EditIcon, TrashIcon, ViewIcon} from "lucide-react";
+import {EditIcon, ViewIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Role, UserType} from "@/types";
-import {deleteUser, getRoles, getUsers} from "@/actions/users";
+import {deleteUser, getRoles} from "@/actions/users";
 import Link from "next/link";
 import {useAuth} from "@/hooks/use-auth";
 import {hasPermission} from "@/lib/utils";
@@ -21,12 +20,6 @@ import AssignRoleForm from "@/components/forms/assign-role-form";
 import DeleteButton from "@/components/buttons/delete-button";
 import {PERMISSIONS} from "@/lib/constants";
 
-interface Result {
-  next: string | null;
-  previous: string | null;
-  count: number;
-  results: UserType[]
-}
 
 export default function UsersTable({users}: {users: UserType[]}) {
   const [roles, setRoles] = useState<Role[]>([]);

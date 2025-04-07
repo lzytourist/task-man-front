@@ -1,5 +1,5 @@
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {FolderArchiveIcon, PersonStandingIcon} from "lucide-react";
+import {PersonStandingIcon} from "lucide-react";
 import {UserType} from "@/types";
 import {getUsers} from "@/actions/users";
 

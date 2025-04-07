@@ -7,7 +7,8 @@ import Link from "next/link";
 import {ArrowLeft} from "lucide-react";
 import {Badge} from "@/components/ui/badge";
 
-export default async function Page({params: {id}}: { params: { id: string } }) {
+export default async function Page({params}: { params: Promise<{ id: string }> }) {
+  const {id} = await params;
   const task = await getTask(id) as Task;
 
   return (

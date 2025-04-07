@@ -80,7 +80,7 @@ export default function RoleForm({permissions, role}: { permissions: Permission[
         <FormLabel>Permissions</FormLabel>
         <div className={'grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'}>
           {(permissions).map((permission, index) => (
-            <FormField key={index} render={({field}) => (
+            <FormField key={index} render={() => (
             <FormItem className={'flex items-center'}>
               <FormLabel className={'capitalize'}>{permission.title}</FormLabel>
               <FormControl>

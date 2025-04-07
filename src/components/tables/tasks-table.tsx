@@ -3,7 +3,6 @@ import {formatDate} from "@/lib/utils";
 import {Badge} from "@/components/ui/badge";
 import ActionButtons from "@/app/dashboard/tasks/action-buttons";
 import {Task} from "@/types";
-import {SpaceIcon} from "lucide-react";
 
 const statusColor = {
   'pending': 'text-purple-500',
