@@ -3,18 +3,46 @@
 import {BellIcon} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {useEffect, useState} from "react";
-import {getNotifications} from "@/actions/auth";
-import {Notification} from "@/types";
+import {deleteNotification, getNotifications, notificationMarkSeen} from "@/actions/auth";
+import {NotificationType} from "@/types";
+import Notification from "@/components/notification";
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
 
   useEffect(() => {
     (async () => {
-      const data = await getNotifications() as Notification[];
+      const data = await getNotifications() as NotificationType[];
       setNotifications(data);
     })()
   }, []);
+
+  const markSeenSingle = async (id: string) => {
+    await notificationMarkSeen([id]);
+
+    setNotifications((prevState) => {
+      const new_state: NotificationType[] = [];
+      prevState.forEach((notification) => {
+        if (notification.id === id) {
+          new_state.push({
+            ...notification,
+            seen: true
+          });
+        } else {
+          new_state.push(notification);
+        }
+      });
+      return new_state;
+    });
+  }
+
+  const handleDelete = async (id: string) => {
+    await deleteNotification(id);
+
+    setNotifications((prevState) => {
+      return prevState.filter(notification => notification.id !== id)
+    });
+  }
 
   return (
     <Popover>
@@ -23,9 +51,11 @@ export default function Notifications() {
         <BellIcon/>
       </PopoverTrigger>
       <PopoverContent>
-        {notifications.map((notification, index) => (
-          <div className={'border-b-2 border-gray-100 py-1 text-sm'} key={index}>{notification.message}</div>
-        ))}
+        {notifications.map((notification, index) => <Notification
+          key={index}
+          deleteNotification={handleDelete}
+          markSeen={markSeenSingle}
+          notification={notification}/>)}
       </PopoverContent>
     </Popover>
   )

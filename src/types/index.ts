@@ -62,10 +62,12 @@ export interface Task {
   status: string;
 }
 
-export interface Notification {
+export interface NotificationType {
+  id: string;
   message: string;
   generated_by: UserType,
   user: UserType,
+  seen: boolean;
   created_at: string;
   updated_at: string;
 }
