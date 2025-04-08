@@ -104,3 +104,12 @@ export const notificationMarkSeen = async (ids: string[]) => {
     body: JSON.stringify({'ids': ids})
   });
 }
+
+export const getAccesToken = async () => {
+  const cookieStore = await cookies();
+  const access = cookieStore.get(ACCESS_COOKIE_NAME);
+  if (!access?.value) {
+    return '';
+  }
+  return access.value;
+}

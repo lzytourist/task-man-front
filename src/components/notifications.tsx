@@ -3,9 +3,10 @@
 import {BellIcon} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {useEffect, useState} from "react";
-import {deleteNotification, getNotifications, notificationMarkSeen} from "@/actions/auth";
+import {deleteNotification, getAccesToken, getNotifications, notificationMarkSeen} from "@/actions/auth";
 import {NotificationType} from "@/types";
 import Notification from "@/components/notification";
+import {toast} from "sonner";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
@@ -14,7 +15,26 @@ export default function Notifications() {
     (async () => {
       const data = await getNotifications() as NotificationType[];
       setNotifications(data);
+
+      const accessToken = await getAccesToken();
+      const ws = new WebSocket('ws://localhost:8000/ws/notifications/?token=' + accessToken);
+
+      ws.onopen = function () {
+        // console.log('connected')
+      }
+
+      ws.onerror = function (err) {
+        console.log('error', err)
+      }
+
+      ws.onmessage = function (msg) {
+        // console.log('message', msg.data)
+        const data = JSON.parse(msg.data) as {type: string, message: string};
+        toast.message(data.message);
+      }
     })()
+
+
   }, []);
 
   const markSeenSingle = async (id: string) => {
