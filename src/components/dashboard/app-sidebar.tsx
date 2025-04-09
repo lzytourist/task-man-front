@@ -40,8 +40,8 @@ const data = {
     },
     {
       title: "Analytics",
-      url: "#",
-      permissions: [],
+      url: "/dashboard/analytics",
+      permissions: ['view_analytics'],
       icon: BarChartIcon
     },
     {
