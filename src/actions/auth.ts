@@ -126,9 +126,7 @@ export const sendEmail = async (data: EmailSchemaType) => {
     },
     body: JSON.stringify(data)
   });
-
-  console.log(response)
-
+  
   return {
     error: !response.ok,
     data: !response.ok ? await response.json() : ''
