@@ -58,7 +58,7 @@ const data = {
     },
     {
       title: "Email",
-      url: "#",
+      url: "/dashboard/email",
       permissions: ['send_email'],
       icon: LucideMail
     },
