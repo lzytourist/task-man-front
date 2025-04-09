@@ -140,7 +140,7 @@ const data = {
   documents: [
     {
       name: "Reports",
-      url: "#",
+      url: "/dashboard/reports",
       permissions: ['generate_report'],
       icon: ClipboardListIcon
     },
