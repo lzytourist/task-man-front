@@ -1,7 +1,7 @@
 'use client'
 
 import {EmailSchemaType, UserType} from "@/types";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {EmailSchema} from "@/lib/schemas";

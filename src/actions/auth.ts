@@ -4,7 +4,6 @@ import {EmailSchemaType, LoginSchemaType} from "@/types";
 import {cookies} from "next/headers";
 import {ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME} from "@/lib/constants";
 import {getTokenExpiry} from "@/lib/utils";
-import {revalidatePath} from "next/cache";
 
 interface LoginToken {
   access: string;
@@ -126,7 +125,7 @@ export const sendEmail = async (data: EmailSchemaType) => {
     },
     body: JSON.stringify(data)
   });
-  
+
   return {
     error: !response.ok,
     data: !response.ok ? await response.json() : ''
