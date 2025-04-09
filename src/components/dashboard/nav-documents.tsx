@@ -22,6 +22,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import {hasPermission} from "@/lib/utils";
+import {useAuth} from "@/hooks/use-auth";
 
 export function NavDocuments({
   items,
@@ -29,16 +31,19 @@ export function NavDocuments({
   items: {
     name: string
     url: string
-    icon: LucideIcon
+    icon: LucideIcon,
+    permissions: string[]
   }[]
 }) {
   const { isMobile } = useSidebar()
+
+  const {user} = useAuth();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Documents</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
+        {items.map((item) => user && hasPermission(item.permissions, user) && (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <a href={item.url}>
