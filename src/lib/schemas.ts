@@ -30,3 +30,9 @@ export const TaskSchema = z.object({
   deadline: z.string(),
   assigned_to_id: z.string(),
 });
+
+export const EmailSchema = z.object({
+  to: z.string().email({message: "Please enter a valid email"}),
+  subject: z.string().min(1, {message: "Please enter email subject"}),
+  message: z.string().min(1, {message: "Please enter you message"}),
+});

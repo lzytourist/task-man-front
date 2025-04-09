@@ -1,11 +1,12 @@
 import {z} from "zod";
-import {AssignRoleSchema, LoginSchema, RoleSchema, TaskSchema, UserSchema} from "@/lib/schemas";
+import {AssignRoleSchema, EmailSchema, LoginSchema, RoleSchema, TaskSchema, UserSchema} from "@/lib/schemas";
 
 export type LoginSchemaType = z.infer<typeof LoginSchema>;
 export type UserSchemaType = z.infer<typeof UserSchema>;
 export type RoleSchemaType = z.infer<typeof RoleSchema>;
 export type AssignRoleType = z.infer<typeof AssignRoleSchema>;
 export type TaskSchemaType = z.infer<typeof TaskSchema>;
+export type EmailSchemaType = z.infer<typeof EmailSchema>;
 
 export interface AuthContextType {
   user: AuthUserType | undefined,
