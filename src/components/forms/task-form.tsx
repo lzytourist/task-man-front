@@ -15,7 +15,7 @@ import {useRouter} from "next/navigation";
 const STATUS = [
   {value: 'pending', label: 'Pending'},
   {value: 'accepted', label: 'Accepted'},
-  {value: 'in_progress', label: 'In progress'},
+  {value: 'in-progress', label: 'In progress'},
   {value: 'completed', label: 'Completed'}
 ];
 
